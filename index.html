@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e0e10">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Work Diary</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#0e0e10;--card:#18181b;--field:#212125;--line:#2c2c31;--fg:#f4f4f5;--mut:#8f8f98;--acc:#ff8a1f;--acc-fg:#140a00;--accsoft:rgba(255,138,31,.15);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#fff;--card:#f6f6f7;--field:#ececee;--line:#dedee2;--fg:#0e0e10;--mut:#6b6b73;--acc:#f26b00;--acc-fg:#fff;--accsoft:rgba(242,107,0,.12)}}
+:root[data-theme="light"]{--bg:#fff;--card:#f6f6f7;--field:#ececee;--line:#dedee2;--fg:#0e0e10;--mut:#6b6b73;--acc:#f26b00;--acc-fg:#fff;--accsoft:rgba(242,107,0,.12)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:600px;margin:0 auto;padding:18px 14px 110px}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.top{display:flex;gap:8px;align-items:center}
+h1{font-size:1.35rem;font-weight:600;margin:0}
+input,select,textarea,button{font:inherit;color:var(--fg)}
+input,select,textarea{width:100%;background:var(--field);border:1px solid transparent;border-radius:12px;padding:11px 14px;transition:border-color .15s}
+textarea{resize:vertical;min-height:130px;line-height:1.5}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--acc)}
+button{cursor:pointer;border:0;border-radius:12px;background:var(--field);padding:10px 16px;transition:background .15s,transform .1s}
+button:active{transform:scale(.97)}
+button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.icon{width:40px;height:40px;padding:0;border-radius:50%}
+.lang{height:40px;padding:0 14px;border-radius:999px;font-size:.8rem;font-weight:600;color:var(--acc)}
+.row{display:flex;gap:8px;margin-top:8px}
+.row>*{flex:1;min-width:0}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:10px 0 4px;scrollbar-width:none}
+.chip{flex:none;border-radius:999px;padding:5px 12px;font-size:.85rem;background:var(--field);color:var(--mut)}
+.chip.on{background:var(--acc);color:var(--acc-fg);font-weight:500}
+.gh{display:flex;justify-content:space-between;margin:22px 4px 8px;font-weight:600;color:var(--acc)}
+.gh span{color:var(--mut);font-weight:400}
+.item{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:8px;cursor:pointer;transition:border-color .15s}
+.item:hover{border-color:var(--acc)}
+.meta{display:flex;justify-content:space-between;gap:10px;font-size:.82rem;color:var(--mut)}
+.cl{font-weight:600;font-size:1rem;color:var(--fg);margin:2px 0 4px;overflow-wrap:anywhere}
+.sv{white-space:pre-wrap;overflow-wrap:anywhere;opacity:.92}
+a.lk{color:var(--acc);text-decoration:underline;text-underline-offset:2px}
+.tg{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.tg i{font-style:normal;font-size:.78rem;padding:2px 10px;border-radius:999px;background:var(--accsoft);color:var(--acc)}
+.fl{display:inline-block;margin:8px 6px 0 0;padding:3px 10px;border-radius:999px;background:var(--field);font-size:.8rem;cursor:pointer;overflow-wrap:anywhere}
+.empty{color:var(--mut);padding:36px 0;text-align:center}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:18px;color:var(--mut);font-size:.85rem}
+.box{margin-top:18px;padding:12px 14px;background:var(--card);border:1px solid var(--line);border-radius:14px}
+.box .p{color:var(--mut);font-size:.82rem;overflow-wrap:anywhere;margin:4px 0 10px}
+.fab{position:fixed;right:max(18px,calc(50% - 282px));bottom:calc(20px + env(safe-area-inset-bottom,0px));width:58px;height:58px;border-radius:50%;background:var(--acc);color:var(--acc-fg);font-size:2rem;line-height:1;padding:0;box-shadow:0 6px 20px rgba(255,138,31,.35)}
+dialog{border:1px solid var(--line);border-radius:20px;background:var(--card);color:var(--fg);width:min(560px,calc(100% - 20px));max-height:calc(100% - 20px);overflow:auto;padding:18px;margin:auto}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+dialog h2{margin:0 0 12px;font-size:1.1rem;font-weight:600}
+label{display:block;font-size:.82rem;color:var(--mut);margin:12px 0 5px 4px}
+.chk{display:flex;gap:10px;align-items:center;margin:16px 0 0 4px;color:var(--fg);font-size:.9rem}
+.chk input{width:auto;accent-color:var(--acc)}
+.btns{display:flex;gap:8px;margin-top:18px}
+.btns .save{flex:2;background:var(--acc);color:var(--acc-fg);font-weight:600}
+.btns .del{color:#ff6b6b}
+#msg{position:fixed;left:0;right:0;bottom:90px;text-align:center;color:var(--acc);font-size:.85rem;pointer-events:none}
+</style>
+</head>
+<body>
+<main>
+<header><h1 data-i="title">Щоденник робіт</h1>
+<div class="top"><button class="lang" id="lang" aria-label="Language">EN</button><button class="icon" id="theme" aria-label="Theme">◐</button></div></header>
+<input id="q" type="search" data-p="search" aria-label="Search">
+<div class="row">
+<select id="sort" aria-label="Sort"><option value="new" data-i="s_new"></option><option value="old" data-i="s_old"></option><option value="cl" data-i="s_name"></option></select>
+<select id="grp" aria-label="Group"><option value="none" data-i="g_none"></option><option value="client" data-i="g_name"></option><option value="type" data-i="g_type"></option><option value="kw" data-i="g_kw"></option><option value="month" data-i="g_month"></option></select>
+</div>
+<div class="chips" id="tagbar"></div>
+<div id="list"></div>
+<div class="foot"><span id="count"></span><span><button id="imp" data-i="imp"></button> <button id="copy" data-i="copy"></button></span></div>
+
+<div class="box" id="webv"><label for="vault" style="margin-top:0" data-i="vault"></label><input id="vault" autocomplete="off" data-p="vault_ph"></div>
+<div class="box" id="desk" style="display:none">
+<label style="margin-top:0" data-i="desk_vault"></label><div class="p" id="vpath"></div>
+<div class="row" style="margin-top:0"><button id="pick" data-i="desk_choose"></button><button id="sync" data-i="desk_sync"></button></div>
+<label for="folder" data-i="desk_folder"></label><input id="folder" autocomplete="off">
+</div>
+</main>
+<button class="fab" id="add" aria-label="+">+</button>
+<div id="msg" role="status"></div>
+
+<dialog id="dlg">
+<h2 id="dt"></h2>
+<label for="date" data-i="date"></label><input type="date" id="date">
+<label for="type" data-i="type"></label>
+<select id="type"><option value="client" data-i="ty_client"></option><option value="project" data-i="ty_project"></option><option value="internal" data-i="ty_internal"></option><option value="other" data-i="ty_other"></option></select>
+<label for="client" id="clabel"></label><input id="client" autocomplete="off" list="cls" data-p="name_ph">
+<datalist id="cls"></datalist>
+<div class="chips" id="recent"></div>
+<label for="serv" data-i="serv"></label><textarea id="serv" data-p="serv_ph"></textarea>
+<label for="kw" data-i="kw"></label><input id="kw" autocomplete="off" data-p="kw_ph">
+<div id="attwrap" style="display:none"><label data-i="files"></label><button type="button" id="attach" data-i="attach"></button><div id="flist"></div></div>
+<label class="chk"><input type="checkbox" id="obs"> <span data-i="obs"></span></label>
+<div class="btns"><button class="del" id="del" type="button" data-i="del"></button><button id="cancel" type="button" data-i="cancel"></button><button class="save" id="save" type="button" data-i="savebtn"></button></div>
+</dialog>
+
+<dialog id="idlg">
+<h2 data-i="imp_title"></h2>
+<label for="itxt" data-i="imp_label"></label>
+<textarea id="itxt" placeholder="### 02.10.2026 · Name&#10;Text&#10;#type/client #tag"></textarea>
+<div class="btns"><button id="icancel" type="button" data-i="cancel"></button><button class="save" id="irun" type="button" data-i="imp_run"></button></div>
+</dialog>
+
+<script>
+(function(){
+var KEY="shchodennyk-v1",TK="shchodennyk-theme",OK="shchodennyk-obs",VK="shchodennyk-vault",LK="shchodennyk-lang",PK="shchodennyk-vaultpath",FK="shchodennyk-folder",TYK="shchodennyk-type";
+var TYPES=["client","project","internal","other"];
+var items=[],tagF="",editId=null,pend=[],curFiles=[],lang="uk",VAULT="",FOLDER="Надані послуги";
+var TAURI=window.__TAURI__&&window.__TAURI__.core?window.__TAURI__:null;
+var $=function(i){return document.getElementById(i)};
+var MN_UK=["січень","лютий","березень","квітень","травень","червень","липень","серпень","вересень","жовтень","листопад","грудень"];
+var MN_EN=["January","February","March","April","May","June","July","August","September","October","November","December"];
+var L={
+uk:{title:"Щоденник робіт",search:"Пошук за назвою, послугою, словом",s_new:"Спершу нові",s_old:"Спершу старі",s_name:"За назвою А–Я",g_none:"Без груп",g_name:"За клієнтами/проєктами",g_type:"За типом",g_kw:"За ключовими словами",g_month:"За місяцями",all:"Усі",e1:"Записів ще немає. Натисніть +, щоб додати перший.",e2:"Нічого не знайдено.",total:"Усього записів: ",copy:"Копіювати все",imp:"Імпорт",dtn:"Новий запис",dte:"Редагувати запис",date:"Дата",type:"Тип",ty_client:"Клієнт",ty_project:"Проєкт",ty_internal:"Внутрішня робота",ty_other:"Інше",name_ph:"Ім’я або назва",serv:"Виконані роботи",serv_ph:"Опишіть, що було зроблено. Посилання (https://…) стануть клікабельними.",kw:"Ключові слова (через кому)",kw_ph:"напр.: ремонт, консультація",del:"Видалити",cancel:"Скасувати",savebtn:"Зберегти",obs:"Надіслати в Obsidian після збереження",vault:"Назва сховища Obsidian (необов’язково)",vault_ph:"Якщо порожньо, відкриється останнє сховище",fill:"Заповніть дату, назву та виконані роботи.",saved:"Збережено.",deleted:"Видалено.",sent:"Записано в Obsidian.",err:"Помилка",copied:"Скопійовано. Можна вставити в Obsidian.",cfail:"Копіювання заборонено браузером.",nocopy:"Немає що копіювати.",cdel:"Видалити цей запис?",it:"Імпорт з Obsidian",il:"Вставте текст нотатки (або кількох нотаток) з Obsidian",ir:"Імпортувати",inone:"Записів у форматі щоденника не знайдено.",idone:"Додано: {a}, пропущено дублів: {b}.",dv:"Папка сховища Obsidian",dc:"Обрати папку",dn:"Не обрано",ds:"Синхронізувати з Obsidian",df:"Папка для записів у сховищі",files:"Файли",attach:"Додати фото чи документи",needv:"Спершу оберіть папку сховища Obsidian.",nofile:"Збереження в сховищі можливе лише в десктопній версії."},
+en:{title:"Work Diary",search:"Search by name, service, keyword",s_new:"Newest first",s_old:"Oldest first",s_name:"By name A–Z",g_none:"No groups",g_name:"By client/project",g_type:"By type",g_kw:"By keyword",g_month:"By month",all:"All",e1:"No entries yet. Tap + to add the first one.",e2:"Nothing found.",total:"Total entries: ",copy:"Copy all",imp:"Import",dtn:"New entry",dte:"Edit entry",date:"Date",type:"Type",ty_client:"Client",ty_project:"Project",ty_internal:"Internal work",ty_other:"Other",name_ph:"Name or title",serv:"Work done",serv_ph:"Describe what was done. Links (https://…) become clickable.",kw:"Keywords (comma-separated)",kw_ph:"e.g.: repair, consulting",del:"Delete",cancel:"Cancel",savebtn:"Save",obs:"Send to Obsidian after saving",vault:"Obsidian vault name (optional)",vault_ph:"If empty, the last used vault opens",fill:"Fill in the date, name and work done.",saved:"Saved.",deleted:"Deleted.",sent:"Written to Obsidian.",err:"Error",copied:"Copied. You can paste it into Obsidian.",cfail:"Clipboard access denied by the browser.",nocopy:"Nothing to copy.",cdel:"Delete this entry?",it:"Import from Obsidian",il:"Paste the text of one or more Obsidian notes",ir:"Import",inone:"No diary-format entries found.",idone:"Added: {a}, duplicates skipped: {b}.",dv:"Obsidian vault folder",dc:"Choose folder",dn:"Not selected",ds:"Sync from Obsidian",df:"Folder for entries in the vault",files:"Files",attach:"Add photos or documents",needv:"Choose the Obsidian vault folder first.",nofile:"Saving to the vault is available in the desktop version only."}
+};
+// short aliases used in data-i attributes
+var ALIAS={imp_title:"it",imp_label:"il",imp_run:"ir",desk_vault:"dv",desk_choose:"dc",desk_sync:"ds",desk_folder:"df",dt_new:"dtn",dt_edit:"dte"};
+function t(k){k=ALIAS[k]||k;return(L[lang]&&L[lang][k])||L.uk[k]||k}
+function applyLang(){
+document.documentElement.lang=lang;document.title=t("title");$("lang").textContent=lang==="uk"?"EN":"UA";
+Array.prototype.forEach.call(document.querySelectorAll("[data-i]"),function(e){e.textContent=t(e.getAttribute("data-i"))});
+Array.prototype.forEach.call(document.querySelectorAll("[data-p]"),function(e){e.placeholder=t(e.getAttribute("data-p"))});
+$("clabel").textContent=t("ty_"+$("type").value);deskUI();render()}
+function ls(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function lset(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function inv(c,a){return TAURI.core.invoke(c,a)}
+function load(){try{var r=localStorage.getItem(KEY);items=r?JSON.parse(r):[]}catch(e){items=[]}
+items.forEach(function(i){if(!i.k)i.k=[];if(!i.t)i.t="client";if(!i.files)i.files=[]})}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(items))}catch(e){say(t("err"))}}
+function say(m){$("msg").textContent=m;setTimeout(function(){$("msg").textContent=""},2800)}
+function today(){var d=new Date();return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2)}
+function fmt(s){var p=s.split("-");return p[2]+"."+p[1]+"."+p[0]}
+function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
+function parseK(s){var o=[];s.split(/[,;]+/).forEach(function(w){w=w.replace(/^[#\s]+/,"").trim().toLowerCase();if(w&&o.indexOf(w)<0)o.push(w)});return o}
+function linkify(box,text){
+var re=/https?:\/\/[^\s<>"')\]]+/g,last=0,m;
+while((m=re.exec(text))){
+if(m.index>last)box.appendChild(document.createTextNode(text.slice(last,m.index)));
+var u=m[0].replace(/[.,;:!?]+$/,""),a=el("a","lk",u);a.href=u;a.target="_blank";a.rel="noopener noreferrer";
+a.onclick=function(ev){ev.stopPropagation();if(TAURI){ev.preventDefault();inv("open_link",{url:this.href}).catch(function(e){say(t("err")+": "+e)})}};
+box.appendChild(a);last=m.index+u.length;re.lastIndex=last}
+if(last<text.length)box.appendChild(document.createTextNode(text.slice(last)))}
+function cmpFn(){var s=$("sort").value;
+return function(a,b){
+if(s==="cl"){var c=a.c.localeCompare(b.c,lang);if(c)return c}
+if(s==="old")return a.d<b.d?-1:a.d>b.d?1:a.id-b.id;
+return a.d<b.d?1:a.d>b.d?-1:b.id-a.id}}
+function fileChip(f){var c=el("span","fl","📎 "+f.split("/").pop());
+c.onclick=function(ev){ev.stopPropagation();if(TAURI&&VAULT)inv("open_file",{vault:VAULT,rel:f}).catch(function(e){say(t("err")+": "+e)})};return c}
+function card(i){
+var c=el("div","item");c.tabIndex=0;
+var m=el("div","meta");m.appendChild(el("span",null,fmt(i.d)));m.appendChild(el("span",null,t("ty_"+i.t)));c.appendChild(m);
+c.appendChild(el("div","cl",i.c));
+var sv=el("div","sv");linkify(sv,i.s);c.appendChild(sv);
+if(TAURI&&i.files.length){var w=el("div");i.files.forEach(function(f){w.appendChild(fileChip(f))});c.appendChild(w)}
+if(i.k.length){var tg=el("div","tg");i.k.forEach(function(k){tg.appendChild(el("i",null,"#"+k))});c.appendChild(tg)}
+c.onclick=function(){openDlg(i.id)};
+c.onkeydown=function(e){if(e.key==="Enter")openDlg(i.id)};
+return c}
+function render(){
+var q=$("q").value.trim().toLowerCase(),box=$("list");box.innerHTML="";
+var all={};items.forEach(function(i){i.k.forEach(function(k){all[k]=1})});
+if(tagF&&!all[tagF])tagF="";
+var tb=$("tagbar");tb.innerHTML="";
+var ks=Object.keys(all).sort(function(a,b){return a.localeCompare(b,lang)});
+if(ks.length){var a0=el("button","chip"+(tagF?"":" on"),t("all"));a0.onclick=function(){tagF="";render()};tb.appendChild(a0);
+ks.forEach(function(k){var b=el("button","chip"+(tagF===k?" on":""),"#"+k);b.onclick=function(){tagF=tagF===k?"":k;render()};tb.appendChild(b)})}
+var list=items.filter(function(i){return(!tagF||i.k.indexOf(tagF)>-1)&&(!q||(i.c+" "+i.s+" "+i.k.join(" ")).toLowerCase().indexOf(q)>-1)}).sort(cmpFn());
+if(!list.length)box.appendChild(el("div","empty",items.length?t("e2"):t("e1")));
+var g=$("grp").value,groups={},order=[];
+function put(k,i){if(!groups[k]){groups[k]=[];order.push(k)}groups[k].push(i)}
+list.forEach(function(i){
+if(g==="none")put("",i);
+else if(g==="client")put(i.c,i);
+else if(g==="type")put(i.t,i);
+else if(g==="month")put(i.d.slice(0,7),i);
+else if(i.k.length)i.k.forEach(function(k){put("#"+k,i)});else put("—",i)});
+if(g==="client"||g==="kw")order.sort(function(a,b){return a.localeCompare(b,lang)});
+if(g==="type")order.sort(function(a,b){return TYPES.indexOf(a)-TYPES.indexOf(b)});
+if(g==="month")order.sort().reverse();
+order.forEach(function(k){
+if(g!=="none"){var label=k;
+if(g==="month"){var p=k.split("-");label=(lang==="uk"?MN_UK[+p[1]-1]:MN_EN[+p[1]-1])+" "+p[0]}
+if(g==="type")label=t("ty_"+k);
+var h=el("div","gh",label);h.appendChild(el("span",null,groups[k].length));box.appendChild(h)}
+groups[k].forEach(function(i){box.appendChild(card(i))})});
+$("count").textContent=t("total")+items.length}
+function clientsRecent(){var seen={},o=[];items.slice().sort(function(a,b){return b.id-a.id}).forEach(function(i){var k=i.c.toLowerCase();if(!seen[k]){seen[k]=1;o.push(i.c)}});return o}
+function renderFiles(){
+var f=$("flist");f.innerHTML="";
+curFiles.forEach(function(r){f.appendChild(fileChip(r))});
+pend.forEach(function(p,n){var c=el("span","fl","＋ "+p.split(/[\\/]/).pop()+" ✕");c.onclick=function(){pend.splice(n,1);renderFiles()};f.appendChild(c)})}
+function openDlg(id){
+editId=id;var it=id?items.filter(function(n){return n.id===id})[0]:null;
+$("dt").textContent=it?t("dte"):t("dtn");
+$("date").value=it?it.d:today();
+$("type").value=it?it.t:(ls(TYK)||"client");
+$("clabel").textContent=t("ty_"+$("type").value);
+$("client").value=it?it.c:"";$("serv").value=it?it.s:"";$("kw").value=it?it.k.join(", "):"";
+$("del").style.display=it?"":"none";
+var pref=ls(OK);pref=pref===null?!!(TAURI&&VAULT):pref==="1";
+$("obs").checked=it?false:pref;
+pend=[];curFiles=it?it.files.slice():[];$("attwrap").style.display=TAURI?"":"none";renderFiles();
+var cl=clientsRecent(),dl=$("cls");dl.innerHTML="";
+cl.forEach(function(n){var o=el("option");o.value=n;dl.appendChild(o)});
+var r=$("recent");r.innerHTML="";
+cl.slice(0,8).forEach(function(n){var b=el("button","chip",n);b.type="button";b.onclick=function(){$("client").value=n;$("serv").focus()};r.appendChild(b)});
+$("dlg").showModal()}
+$("type").onchange=function(){$("clabel").textContent=t("ty_"+$("type").value)};
+$("attach").onclick=async function(){
+if(!VAULT){say(t("needv"));return}
+try{var r=await TAURI.dialog.open({multiple:true});if(!r)return;if(typeof r==="string")r=[r];r.forEach(function(p){if(pend.indexOf(p)<0)pend.push(p)});renderFiles()}catch(e){say(t("err")+": "+e)}};
+$("add").onclick=function(){openDlg(null)};
+$("cancel").onclick=function(){$("dlg").close()};
+function entryMd(i){
+var o="### "+fmt(i.d)+" · "+i.c+"\n"+i.s+"\n";
+(i.files||[]).forEach(function(f){o+=(/\.(png|jpe?g|gif|webp|bmp|svg)$/i.test(f)?"!":"")+"[["+f+"]]\n"});
+o+=["#type/"+i.t].concat(i.k.map(function(k){return"#"+k.replace(/\s+/g,"-")})).join(" ")+"\n";return o}
+function allMd(){var o="",y="",m="";
+items.slice().sort(function(a,b){return a.d<b.d?-1:a.d>b.d?1:a.id-b.id}).forEach(function(i){
+var yy=i.d.slice(0,4),mm=i.d.slice(5,7);
+if(yy!==y){o+=(o?"\n":"")+"# "+yy+"\n";y=yy;m=""}
+if(mm!==m){o+="\n## "+MN_UK[+mm-1]+"\n\n";m=mm}
+o+=entryMd(i)+"\n"});
+return o.trim()+"\n"}
+async function toObs(i){
+var yy=i.d.slice(0,4),mm=i.d.slice(5,7),md=entryMd(i),base=FOLDER+"/"+yy+"/"+mm+" "+MN_UK[+mm-1];
+if(TAURI){
+if(!VAULT){say(t("needv"));return}
+try{await inv("append_note",{vault:VAULT,rel:base+".md",content:"\n"+md});say(t("sent"))}catch(e){say(t("err")+": "+e)}
+return}
+var v=$("vault").value.trim();
+try{navigator.clipboard.writeText(md)}catch(e){}
+location.href="obsidian://new?"+(v?"vault="+encodeURIComponent(v)+"&":"")+"file="+encodeURIComponent(base)+"&append=true&content="+encodeURIComponent("\n"+md)}
+$("save").onclick=async function(){
+var d=$("date").value,c=$("client").value.trim(),s=$("serv").value.trim(),ty=$("type").value;
+if(!d||!c||!s||TYPES.indexOf(ty)<0){say(t("fill"));return}
+var k=parseK($("kw").value),send=$("obs").checked,files=curFiles.slice();
+if(TAURI&&VAULT&&pend.length){
+var dir=FOLDER+"/Файли/"+d.slice(0,4)+"/"+d.slice(5,7);
+for(var n=0;n<pend.length;n++){try{var nm=await inv("copy_file_into",{vault:VAULT,relDir:dir,src:pend[n]});files.push(dir+"/"+nm)}catch(e){say(t("err")+": "+e);return}}}
+lset(TYK,ty);if(!editId)lset(OK,send?"1":"0");
+var rec;
+if(editId){items.forEach(function(i){if(i.id===editId){i.d=d;i.c=c;i.s=s;i.k=k;i.t=ty;i.files=files;rec=i}})}
+else{rec={id:Date.now(),d:d,c:c,s:s,k:k,t:ty,files:files};items.push(rec)}
+save();$("dlg").close();render();say(t("saved"));
+if(send)await toObs(rec)};
+$("del").onclick=function(){if(confirm(t("cdel"))){items=items.filter(function(n){return n.id!==editId});save();$("dlg").close();render();say(t("deleted"))}};
+function parseMd(txt){var out=[],cur=null;
+txt.split(/\r?\n/).forEach(function(l){
+var m=l.match(/^###\s+(\d{2})\.(\d{2})\.(\d{4})\s*[·\-–—]\s*(.+)$/);
+if(m){if(cur)out.push(cur);cur={d:m[3]+"-"+m[2]+"-"+m[1],c:m[4].trim(),ls:[]};return}
+if(!cur)return;
+if(/^#{1,2}\s/.test(l)){out.push(cur);cur=null;return}
+cur.ls.push(l)});
+if(cur)out.push(cur);
+return out.map(function(e){var ls=e.ls,k=[],ty="client",files=[];
+while(ls.length&&!ls[ls.length-1].trim())ls.pop();
+if(ls.length&&/^(#[^\s#]+\s*)+$/.test(ls[ls.length-1].trim())){
+k=parseK(ls.pop().replace(/#/g,",")).filter(function(w){if(w.indexOf("type/")===0){var c=w.slice(5);if(TYPES.indexOf(c)>-1)ty=c;return false}return true})}
+while(ls.length){var fm=ls[ls.length-1].trim().match(/^!?\[\[(.+?)\]\]$/);if(!fm)break;files.unshift(fm[1].split("|")[0]);ls.pop()}
+return{d:e.d,c:e.c,t:ty,s:ls.join("\n").trim(),k:k,files:files}}).filter(function(e){return e.s})}
+function sig(i){return(i.d+"|"+i.c+"|"+i.s).toLowerCase().replace(/\s+/g," ")}
+function merge(found){
+var have={};items.forEach(function(i){have[sig(i)]=1});
+var add=0,t0=Date.now();
+found.forEach(function(e,n){if(!have[sig(e)]){have[sig(e)]=1;e.id=t0+n;items.push(e);add++}});
+save();render();return add}
+$("imp").onclick=function(){$("itxt").value="";$("idlg").showModal()};
+$("icancel").onclick=function(){$("idlg").close()};
+$("irun").onclick=function(){
+var found=parseMd($("itxt").value);
+if(!found.length){say(t("inone"));return}
+var add=merge(found);$("idlg").close();
+say(t("idone").replace("{a}",add).replace("{b}",found.length-add))};
+function deskUI(){$("webv").style.display=TAURI?"none":"";$("desk").style.display=TAURI?"":"none";$("vpath").textContent=VAULT||t("dn");$("folder").value=FOLDER}
+$("pick").onclick=async function(){
+try{var r=await TAURI.dialog.open({directory:true});if(r){VAULT=r;lset(PK,r);deskUI()}}catch(e){say(t("err")+": "+e)}};
+$("folder").oninput=function(){var v=$("folder").value.trim().replace(/^[\/\\]+|[\/\\]+$/g,"");FOLDER=v||"Надані послуги";lset(FK,FOLDER)};
+$("sync").onclick=async function(){
+if(!VAULT){say(t("needv"));return}
+try{var texts=await inv("read_notes",{vault:VAULT,rel:FOLDER}),found=[];
+texts.forEach(function(x){found=found.concat(parseMd(x))});
+var add=merge(found);say(t("idone").replace("{a}",add).replace("{b}",found.length-add))}catch(e){say(t("err")+": "+e)}};
+$("q").oninput=render;$("sort").onchange=render;$("grp").onchange=render;
+$("copy").onclick=function(){
+if(!items.length){say(t("nocopy"));return}
+try{navigator.clipboard.writeText(allMd()).then(function(){say(t("copied"))},function(){say(t("cfail"))})}catch(e){say(t("cfail"))}};
+$("theme").onclick=function(){
+var r=document.documentElement,cur=r.getAttribute("data-theme")||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"),n=cur==="dark"?"light":"dark";
+r.setAttribute("data-theme",n);lset(TK,n)};
+$("lang").onclick=function(){lang=lang==="uk"?"en":"uk";lset(LK,lang);applyLang()};
+var th=ls(TK);if(th)document.documentElement.setAttribute("data-theme",th);
+var sl=ls(LK);lang=sl||((navigator.language||"").slice(0,2)==="uk"?"uk":"en");
+$("vault").value=ls(VK)||"";
+$("vault").oninput=function(){lset(VK,$("vault").value.trim())};
+VAULT=ls(PK)||"";FOLDER=ls(FK)||FOLDER;
+load();applyLang();
+if(!TAURI&&"serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}
+})();
+</script>
+</body>
+</html>
